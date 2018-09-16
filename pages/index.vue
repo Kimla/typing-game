@@ -13,26 +13,36 @@
             <div class="inputHolder">
                 <input
                     v-model="input"
+                    :disabled="ended"
                     type="text"
                     class="input"
                     placeholder="Enter text..."
                     @input="checkWord"
                 >
             </div>
+            <div class="counterHolder">
+                <Counter
+                    ref="counter"
+                />
+            </div>
         </div>
     </div>
 </template>
 
 <script>
+import Counter from '../components/Counter.vue';
 import Word from '../components/Word.vue';
 import importedWords from '../utils/words';
 
 export default {
     components: {
+        Counter,
         Word,
     },
     data() {
         return {
+            started: false,
+            ended: false,
             currentWord: 0,
             input: '',
             importedWords,
@@ -52,9 +62,19 @@ export default {
     },
     methods: {
         checkWord() {
+            if (!this.started) {
+                this.$refs.counter.start();
+                this.started = true;
+            }
+
             if (this.input === this.words[this.currentWord].trim()) {
                 this.currentWord++;
                 this.input = '';
+            }
+
+            if (this.currentWord >= this.words.length) {
+                this.$refs.counter.stop();
+                this.ended = true;
             }
         },
     },
@@ -77,6 +97,7 @@ export default {
     width: 500px;
     margin: 0 auto;
     max-width: 100%;
+    margin-bottom: 30px;
 }
 .input {
     padding: 12px 0;
@@ -90,5 +111,4 @@ export default {
         opacity: 1;
     }
 }
-
 </style>

@@ -19,12 +19,15 @@ export default {
         stop() {
             clearInterval(this.interval);
         },
+        reset() {
+            this.counter = 0;
+        },
     },
 };
 </script>
 
 <style lang="scss" scoped>
 .counter {
-    font-size: 24px;
+    font-size: 26px;
 }
 </style>

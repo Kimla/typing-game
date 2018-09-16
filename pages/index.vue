@@ -25,6 +25,17 @@
                     ref="counter"
                 />
             </div>
+            <div
+                v-if="ended"
+                class="ended text-center mt-8"
+            >
+                <button
+                    class="button"
+                    @click="restart()"
+                >
+                    Play again
+                </button>
+            </div>
         </div>
     </div>
 </template>
@@ -50,17 +61,28 @@ export default {
         };
     },
     mounted() {
-        const words = this.importedWords.split('\n').filter(word => word.length > 0);
-        const choosen = [];
-
-        for (let i = 0; i < 30; i++) {
-            const number = Math.floor(Math.random() * words.length);
-            choosen.push(words[number]);
-        }
-
-        this.words = choosen;
+        this.setWords();
     },
     methods: {
+        restart() {
+            this.started = false;
+            this.ended = false;
+            this.currentWord = 0;
+            this.input = '';
+            this.$refs.counter.reset();
+            this.setWords();
+        },
+        setWords() {
+            const words = this.importedWords.split('\n').filter(word => word.length > 0);
+            const choosen = [];
+
+            for (let i = 0; i < 30; i++) {
+                const number = Math.floor(Math.random() * words.length);
+                choosen.push(words[number]);
+            }
+
+            this.words = choosen;
+        },
         checkWord() {
             if (!this.started) {
                 this.$refs.counter.start();
@@ -84,6 +106,7 @@ export default {
 <style lang="scss" scoped>
 .heading {
     margin-bottom: 50px;
+    color: $primaryColor;
 }
 .words {
     width: 800px;
@@ -100,8 +123,8 @@ export default {
     margin-bottom: 30px;
 }
 .input {
-    padding: 12px 0;
-    border-bottom: 2px solid #ddd;
+    padding: 8px 0;
+    border-bottom: 2px solid $primaryColor;
     width: 100%;
     font-size: 20px;
     font-weight: 400;
@@ -110,5 +133,15 @@ export default {
         color: inherit;
         opacity: 1;
     }
+}
+.button {
+    background-color: $primaryColor;
+    padding: 14px 30px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #fff;
 }
 </style>

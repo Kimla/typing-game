@@ -24,6 +24,6 @@ export default {
 
 <style lang="scss" scoped>
 .isActive .wrapper {
-    background-color: aquamarine;
+    background-color: #fc83ff6b;
 }
 </style>

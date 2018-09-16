@@ -84,6 +84,7 @@ export default {
     width: 100%;
     font-size: 20px;
     font-weight: 400;
+    line-height: normal;
     &::placeholder {
         color: inherit;
         opacity: 1;

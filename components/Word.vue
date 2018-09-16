@@ -3,7 +3,17 @@
         :class="{'isActive': active}"
         class="word"
     >
-        <span class="wrapper">{{ word }}</span>&nbsp;
+        <span class="wrapper">
+            <span
+                v-for="(char, index) in characters"
+                :key="index"
+                :class="{
+                    'isValid': active && char === input[index],
+                    'isInvalid': active && input[index] && char !== input[index],
+                }"
+                class="char"
+            >{{ char }}</span>
+        </span>&nbsp;
     </span>
 </template>
 
@@ -18,6 +28,15 @@ export default {
             type: Boolean,
             required: true,
         },
+        input: {
+            type: String,
+            required: true,
+        },
+    },
+    computed: {
+        characters() {
+            return this.word.split('');
+        },
     },
 };
 </script>
@@ -25,5 +44,11 @@ export default {
 <style lang="scss" scoped>
 .isActive .wrapper {
     background-color: #fc83ff6b;
+}
+.isValid {
+    color: #fff;
+}
+.isInvalid {
+    color: #fb2121
 }
 </style>

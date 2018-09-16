@@ -7,6 +7,7 @@
                     v-for="(word, index) in words"
                     :key="index"
                     :word="word"
+                    :input="input"
                     :active="index === currentWord"
                 />
             </p>

@@ -10,10 +10,12 @@
                     :active="index === currentWord"
                 />
             </p>
-            <div class="inputHolder">
+            <div
+                v-if="!ended"
+                class="inputHolder"
+            >
                 <input
                     v-model="input"
-                    :disabled="ended"
                     type="text"
                     class="input"
                     placeholder="Enter text..."

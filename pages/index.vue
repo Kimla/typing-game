@@ -79,9 +79,8 @@ export default {
             return completed;
         },
         score() {
-            const time = this.$refs.counter.counter;
-            const wordsPerSecond = this.correctWords / time;
-            return parseFloat(wordsPerSecond * 60).toFixed(2);
+            const time = this.$refs.counter.counter / 60;
+            return parseFloat(this.correctWords / time).toFixed(2);
         },
     },
     mounted() {
@@ -100,7 +99,7 @@ export default {
             const words = this.importedWords.split('\n').filter(word => word.length > 0);
             const choosen = [];
 
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 10; i++) {
                 const number = Math.floor(Math.random() * words.length);
                 choosen.push(words[number]);
             }

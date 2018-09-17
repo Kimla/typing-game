@@ -32,6 +32,8 @@
                 v-if="ended"
                 class="ended text-center mt-8"
             >
+                <p class="score">Score: {{ score }} wpm</p>
+
                 <button
                     class="button"
                     @click="restart()"
@@ -64,6 +66,24 @@ export default {
             wordsCompleted: [],
         };
     },
+    computed: {
+        correctWords() {
+            let completed = 0;
+
+            for (let i = 0; i < this.words.length; i++) {
+                if (this.words[i].trim() === this.wordsCompleted[i].trim()) {
+                    completed++;
+                }
+            }
+
+            return completed;
+        },
+        score() {
+            const time = this.$refs.counter.counter;
+            const wordsPerSecond = this.correctWords / time;
+            return parseFloat(wordsPerSecond * 60).toFixed(2);
+        },
+    },
     mounted() {
         this.setWords();
     },
@@ -93,8 +113,10 @@ export default {
                 this.started = true;
             }
 
-            if (event.keyCode === 32) {
-                this.wordsCompleted.push(event.target.value.trim());
+            const value = event.target.value.trim();
+
+            if (event.keyCode === 32 && value.length > 0) {
+                this.wordsCompleted.push(value);
                 this.currentWord++;
                 this.input = '';
             }

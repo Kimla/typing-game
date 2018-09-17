@@ -1,7 +1,29 @@
 <template>
     <div class="page py-8">
-        <div class="container">
-            <h1 class="heading text-center">Typing game</h1>
+        <h1 class="heading text-center">Typing game</h1>
+        <div
+            v-if="!name"
+            class="inputHolder text-center"
+        >
+            <input
+                v-model="nameInput"
+                type="text"
+                class="input mb-8"
+                placeholder="Enter name..."
+                autofocus
+                @keyup.enter="setName"
+            >
+            <button
+                class="button"
+                @click="setName"
+            >
+                Start
+            </button>
+        </div>
+        <div
+            v-if="name"
+            class="container"
+        >
             <p class="words">
                 <Word
                     v-for="(word, index) in words"
@@ -20,6 +42,7 @@
                     type="text"
                     class="input"
                     placeholder="Enter text..."
+                    autofocus
                     @keyup="checkWord"
                 >
             </div>
@@ -42,13 +65,33 @@
                 </button>
             </div>
         </div>
+        <div class="highscore text-center mt-8">
+            <h3>Highscore</h3>
+            <p
+                v-for="score in scores"
+                :key="score.key"
+            >
+                {{ score.name }} - {{ score.wpm }}
+            </p>
+        </div>
     </div>
 </template>
 
 <script>
+import firebase from 'firebase';
 import Counter from '../components/Counter.vue';
 import Word from '../components/Word.vue';
 import importedWords from '../utils/words';
+
+const config = {
+    apiKey: 'AIzaSyDf0dDJp_WiAcqwvrSfBmzJTgXQN5Enwa4',
+    authDomain: 'typing-game-80af6.firebaseapp.com',
+    databaseURL: 'https://typing-game-80af6.firebaseio.com',
+    projectId: 'typing-game-80af6',
+    storageBucket: 'typing-game-80af6.appspot.com',
+    messagingSenderId: '786274798919',
+};
+firebase.initializeApp(config);
 
 export default {
     components: {
@@ -57,6 +100,8 @@ export default {
     },
     data() {
         return {
+            nameInput: null,
+            name: null,
             started: false,
             ended: false,
             currentWord: 0,
@@ -65,6 +110,7 @@ export default {
             words: [],
             wordsCompleted: [],
             inputs: 0,
+            scores: [],
         };
     },
     computed: {
@@ -86,13 +132,30 @@ export default {
     },
     mounted() {
         this.setWords();
+
+        const scoresRef = firebase.database().ref('scores').orderByChild('wpm').limitToLast(10);
+        scoresRef.on('value', (snapshot) => {
+            const scores = [];
+            snapshot.forEach((child) => {
+                scores.push(child.val());
+            });
+
+            this.scores = scores.reverse();
+        });
     },
     methods: {
+        setName() {
+            if (this.nameInput.length > 0) {
+                this.name = this.nameInput;
+            }
+        },
         restart() {
             this.started = false;
             this.ended = false;
             this.currentWord = 0;
             this.input = '';
+            this.wordsCompleted = [];
+            this.inputs = 0;
             this.$refs.counter.reset();
             this.setWords();
         },
@@ -100,7 +163,7 @@ export default {
             const words = this.importedWords.split('\n').filter(word => word.length > 0);
             const choosen = [];
 
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 10; i++) {
                 const number = Math.floor(Math.random() * words.length);
                 choosen.push(words[number]);
             }
@@ -124,11 +187,18 @@ export default {
             }
 
             if (this.currentWord >= this.words.length) {
-                this.$refs.counter.stop();
-                this.ended = true;
                 if (this.inputs < this.words.length * 3) {
                     window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+                    return;
                 }
+                this.$refs.counter.stop();
+                this.ended = true;
+                const key = Date.now();
+                firebase.database().ref(`scores/${key}`).set({
+                    name: this.name,
+                    wpm: this.score,
+                    key,
+                });
             }
         },
     },
@@ -175,5 +245,9 @@ export default {
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #fff;
+}
+h3 {
+    color: $primaryColor;
+    margin-bottom: 20px;
 }
 </style>

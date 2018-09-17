@@ -100,7 +100,7 @@ export default {
             const words = this.importedWords.split('\n').filter(word => word.length > 0);
             const choosen = [];
 
-            for (let i = 0; i < 10; i++) {
+            for (let i = 0; i < 50; i++) {
                 const number = Math.floor(Math.random() * words.length);
                 choosen.push(words[number]);
             }

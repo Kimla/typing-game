@@ -20,7 +20,7 @@
                     type="text"
                     class="input"
                     placeholder="Enter text..."
-                    @input="checkWord"
+                    @keyup="checkWord"
                 >
             </div>
             <div class="counterHolder">
@@ -61,6 +61,7 @@ export default {
             input: '',
             importedWords,
             words: [],
+            wordsCompleted: [],
         };
     },
     mounted() {
@@ -86,13 +87,14 @@ export default {
 
             this.words = choosen;
         },
-        checkWord() {
+        checkWord(event) {
             if (!this.started) {
                 this.$refs.counter.start();
                 this.started = true;
             }
 
-            if (this.input === this.words[this.currentWord].trim()) {
+            if (event.keyCode === 32) {
+                this.wordsCompleted.push(event.target.value.trim());
                 this.currentWord++;
                 this.input = '';
             }

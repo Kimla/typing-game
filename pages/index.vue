@@ -64,6 +64,7 @@ export default {
             importedWords,
             words: [],
             wordsCompleted: [],
+            inputs: 0,
         };
     },
     computed: {
@@ -99,7 +100,7 @@ export default {
             const words = this.importedWords.split('\n').filter(word => word.length > 0);
             const choosen = [];
 
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 10; i++) {
                 const number = Math.floor(Math.random() * words.length);
                 choosen.push(words[number]);
             }
@@ -107,6 +108,8 @@ export default {
             this.words = choosen;
         },
         checkWord(event) {
+            this.inputs++;
+
             if (!this.started) {
                 this.$refs.counter.start();
                 this.started = true;
@@ -123,6 +126,9 @@ export default {
             if (this.currentWord >= this.words.length) {
                 this.$refs.counter.stop();
                 this.ended = true;
+                if (this.inputs < this.words.length * 3) {
+                    window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+                }
             }
         },
     },

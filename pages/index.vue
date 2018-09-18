@@ -71,14 +71,27 @@
                 </button>
             </div>
         </div>
-        <div class="highscore text-center mt-8">
-            <h3>Highscore</h3>
-            <p
-                v-for="score in scores"
-                :key="score.key"
-            >
-                {{ score.name }} - {{ score.wpm }}
-            </p>
+        <div class="container">
+            <div class="flex mt-8 pt-6">
+                <div class="highscore text-center w-1/2">
+                    <h3>Highscore</h3>
+                    <p
+                        v-for="score in highScores"
+                        :key="score.key"
+                    >
+                        {{ score.name }} - {{ score.wpm }}
+                    </p>
+                </div>
+                <div class="highscore text-center w-1/2">
+                    <h3>Latests</h3>
+                    <p
+                        v-for="score in latestScores"
+                        :key="score.key"
+                    >
+                        {{ score.name }} - {{ score.wpm }}
+                    </p>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -116,7 +129,8 @@ export default {
             words: [],
             wordsCompleted: [],
             inputs: 0,
-            scores: [],
+            highScores: [],
+            latestScores: [],
         };
     },
     computed: {
@@ -139,14 +153,24 @@ export default {
     mounted() {
         this.setWords();
 
-        const scoresRef = firebase.database().ref('scores').orderByChild('wpm').limitToLast(10);
-        scoresRef.on('value', (snapshot) => {
+        const highScoresRef = firebase.database().ref('scores').orderByChild('wpm').limitToLast(10);
+        highScoresRef.on('value', (snapshot) => {
             const scores = [];
             snapshot.forEach((child) => {
                 scores.push(child.val());
             });
 
-            this.scores = scores.reverse();
+            this.highScores = scores.reverse();
+        });
+
+        const latestScoresRef = firebase.database().ref('scores').limitToLast(10);
+        latestScoresRef.on('value', (snapshot) => {
+            const scores = [];
+            snapshot.forEach((child) => {
+                scores.push(child.val());
+            });
+
+            this.latestScores = scores.reverse();
         });
     },
     methods: {

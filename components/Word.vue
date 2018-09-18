@@ -1,6 +1,10 @@
 <template>
     <span
-        :class="{'isActive': active}"
+        :class="{
+            'isActive': active,
+            'isCompletedCorrect': completedCorrect,
+            'isCompletedInvalid': completedInvalid,
+        }"
         class="word"
     >
         <span class="wrapper">
@@ -32,6 +36,14 @@ export default {
             type: String,
             required: true,
         },
+        completedCorrect: {
+            type: Boolean,
+            required: true,
+        },
+        completedInvalid: {
+            type: Boolean,
+            required: true,
+        },
     },
     computed: {
         characters() {
@@ -50,5 +62,11 @@ export default {
 }
 .isInvalid {
     color: #fb2121
+}
+.isCompletedCorrect {
+    color: #009688;
+}
+.isCompletedInvalid {
+    color: #F44336;
 }
 </style>

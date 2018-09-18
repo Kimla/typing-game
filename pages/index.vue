@@ -31,6 +31,12 @@
                     :word="word"
                     :input="input"
                     :active="index === currentWord"
+                    :completed-correct="currentWord > index
+                        && words[index] === wordsCompleted[index]
+                    "
+                    :completed-invalid="currentWord > index
+                        && words[index] !== wordsCompleted[index]
+                    "
                 />
             </p>
             <div

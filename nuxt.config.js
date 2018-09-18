@@ -16,7 +16,6 @@ module.exports = {
     */
     head: {
         title: 'Typing game',
-        titleTemplate: '%s - Typing game',
         meta: [
             { charset: 'utf-8' },
             {

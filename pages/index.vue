@@ -73,24 +73,16 @@
         </div>
         <div class="container">
             <div class="flex mt-8 pt-6">
-                <div class="highscore text-center w-1/2">
-                    <h3>Highscore</h3>
-                    <p
-                        v-for="score in highScores"
-                        :key="score.key"
-                    >
-                        {{ score.name }} - {{ score.wpm }}
-                    </p>
-                </div>
-                <div class="highscore text-center w-1/2">
-                    <h3>Latests</h3>
-                    <p
-                        v-for="score in latestScores"
-                        :key="score.key"
-                    >
-                        {{ score.name }} - {{ score.wpm }}
-                    </p>
-                </div>
+                <ScoreList
+                    :scores="highScores"
+                    heading="Highscore"
+                    class="w-1/2"
+                />
+                <ScoreList
+                    :scores="latestScores"
+                    heading="Latests"
+                    class="w-1/2"
+                />
             </div>
         </div>
     </div>
@@ -98,6 +90,7 @@
 
 <script>
 import Counter from '../components/Counter.vue';
+import ScoreList from '../components/ScoreList.vue';
 import Word from '../components/Word.vue';
 import importedWords from '../utils/words';
 import db from '../utils/firebase';
@@ -105,6 +98,7 @@ import db from '../utils/firebase';
 export default {
     components: {
         Counter,
+        ScoreList,
         Word,
     },
     data() {
@@ -270,9 +264,5 @@ export default {
     text-transform: uppercase;
     letter-spacing: 2px;
     color: #fff;
-}
-h3 {
-    color: $primaryColor;
-    margin-bottom: 20px;
 }
 </style>

@@ -97,20 +97,10 @@
 </template>
 
 <script>
-import firebase from 'firebase';
 import Counter from '../components/Counter.vue';
 import Word from '../components/Word.vue';
 import importedWords from '../utils/words';
-
-const config = {
-    apiKey: 'AIzaSyDf0dDJp_WiAcqwvrSfBmzJTgXQN5Enwa4',
-    authDomain: 'typing-game-80af6.firebaseapp.com',
-    databaseURL: 'https://typing-game-80af6.firebaseio.com',
-    projectId: 'typing-game-80af6',
-    storageBucket: 'typing-game-80af6.appspot.com',
-    messagingSenderId: '786274798919',
-};
-firebase.initializeApp(config);
+import db from '../utils/firebase';
 
 export default {
     components: {
@@ -152,28 +142,38 @@ export default {
     },
     mounted() {
         this.setWords();
-
-        const highScoresRef = firebase.database().ref('scores').orderByChild('wpm').limitToLast(10);
-        highScoresRef.on('value', (snapshot) => {
-            const scores = [];
-            snapshot.forEach((child) => {
-                scores.push(child.val());
-            });
-
-            this.highScores = scores.reverse();
-        });
-
-        const latestScoresRef = firebase.database().ref('scores').limitToLast(10);
-        latestScoresRef.on('value', (snapshot) => {
-            const scores = [];
-            snapshot.forEach((child) => {
-                scores.push(child.val());
-            });
-
-            this.latestScores = scores.reverse();
-        });
+        this.initHighScore();
+        this.initLatestScore();
     },
     methods: {
+        initHighScore() {
+            db.ref('scores').orderByChild('wpm').limitToLast(10)
+                .on('value', (snapshot) => {
+                    const scores = [];
+                    snapshot.forEach((child) => {
+                        scores.push(child.val());
+                    });
+                    this.highScores = scores.reverse();
+                });
+        },
+        initLatestScore() {
+            db.ref('scores').limitToLast(10)
+                .on('value', (snapshot) => {
+                    const scores = [];
+                    snapshot.forEach((child) => {
+                        scores.push(child.val());
+                    });
+                    this.latestScores = scores.reverse();
+                });
+        },
+        addScore(name, wpm) {
+            const key = Date.now();
+            db.ref(`scores/${key}`).set({
+                name,
+                wpm,
+                key,
+            });
+        },
         setName() {
             if (this.nameInput.length > 0) {
                 this.name = this.nameInput;
@@ -223,12 +223,7 @@ export default {
                 }
                 this.$refs.counter.stop();
                 this.ended = true;
-                const key = Date.now();
-                firebase.database().ref(`scores/${key}`).set({
-                    name: this.name,
-                    wpm: this.score,
-                    key,
-                });
+                this.addScore(this.name, this.score);
             }
         },
     },

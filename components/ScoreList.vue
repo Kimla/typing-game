@@ -1,6 +1,6 @@
 <template>
     <div class="scoreList text-center">
-        <h3 class="heading">Highscore</h3>
+        <h3 class="heading">{{ heading }}</h3>
         <p
             v-for="score in scores"
             :key="score.key"

@@ -75,12 +75,12 @@
             <div class="flex mt-8 pt-6">
                 <ScoreList
                     :scores="highScores"
-                    heading="Highscore"
+                    heading="High score"
                     class="w-1/2"
                 />
                 <ScoreList
                     :scores="latestScores"
-                    heading="Latests"
+                    heading="Latest"
                     class="w-1/2"
                 />
             </div>

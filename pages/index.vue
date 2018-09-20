@@ -122,11 +122,15 @@ export default {
         },
     },
     mounted() {
+        this.checkIfNameExists();
         this.setWords();
         this.initHighScore();
         this.initLatestScore();
     },
     methods: {
+        checkIfNameExists() {
+            this.name = window.localStorage.getItem('name');
+        },
         initHighScore() {
             db.ref('scores').orderByChild('wpm').limitToLast(10)
                 .on('value', (snapshot) => {

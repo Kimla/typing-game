@@ -26,6 +26,7 @@ export default {
     methods: {
         submitHandler() {
             if (this.name.length > 0) {
+                window.localStorage.setItem('name', this.name);
                 this.$emit('changed', this.name);
             }
         },

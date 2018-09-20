@@ -37,10 +37,16 @@
                     @keyup="checkWord"
                 >
             </div>
-            <div class="counterHolder">
+            <div class="w-64 mx-auto flex justify-between items-center">
                 <Counter
                     ref="counter"
                 />
+                <button
+                    class="button"
+                    @click="restart()"
+                >
+                    Restart
+                </button>
             </div>
             <div
                 v-if="ended"
@@ -166,6 +172,7 @@ export default {
             this.input = '';
             this.wordsCompleted = [];
             this.inputs = 0;
+            this.$refs.counter.stop();
             this.$refs.counter.reset();
             this.setWords();
         },

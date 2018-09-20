@@ -37,6 +37,10 @@
                     @keyup="checkWord"
                 >
             </div>
+            <Result
+                v-if="ended"
+                :score="score"
+            />
             <div class="w-128 mx-auto flex justify-between items-center">
                 <button
                     class="button"
@@ -52,19 +56,6 @@
                     @click="restart()"
                 >
                     Restart
-                </button>
-            </div>
-            <div
-                v-if="ended"
-                class="ended text-center mt-8"
-            >
-                <p class="score">Score: {{ score }} wpm</p>
-
-                <button
-                    class="button"
-                    @click="restart()"
-                >
-                    Play again
                 </button>
             </div>
         </div>
@@ -88,6 +79,7 @@
 <script>
 import Counter from '../components/Counter.vue';
 import Name from '../components/Name.vue';
+import Result from '../components/Result.vue';
 import ScoreList from '../components/ScoreList.vue';
 import Word from '../components/Word.vue';
 import importedWords from '../utils/words';
@@ -97,6 +89,7 @@ export default {
     components: {
         Counter,
         Name,
+        Result,
         ScoreList,
         Word,
     },
@@ -129,6 +122,8 @@ export default {
             return completed;
         },
         score() {
+            if (!this.ended) return false;
+
             const time = this.$refs.counter.counter / 60;
             return parseFloat(this.correctWords / time).toFixed(2);
         },
@@ -186,7 +181,7 @@ export default {
             const words = this.importedWords.split('\n').filter(word => word.length > 0);
             const choosen = [];
 
-            for (let i = 0; i < 50; i++) {
+            for (let i = 0; i < 5; i++) {
                 const number = Math.floor(Math.random() * words.length);
                 choosen.push(words[number]);
             }

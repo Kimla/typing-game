@@ -59,20 +59,7 @@
                 </button>
             </div>
         </div>
-        <div class="container">
-            <div class="flex mt-8 pt-6">
-                <ScoreList
-                    :scores="highScores"
-                    heading="High score"
-                    class="w-1/2"
-                />
-                <ScoreList
-                    :scores="latestScores"
-                    heading="Latest"
-                    class="w-1/2"
-                />
-            </div>
-        </div>
+        <ScoreLists/>
     </div>
 </template>
 
@@ -80,7 +67,7 @@
 import Counter from '../components/Counter.vue';
 import Name from '../components/Name.vue';
 import Result from '../components/Result.vue';
-import ScoreList from '../components/ScoreList.vue';
+import ScoreLists from '../components/ScoreLists.vue';
 import Word from '../components/Word.vue';
 import importedWords from '../utils/words';
 import db from '../utils/firebase';
@@ -90,7 +77,7 @@ export default {
         Counter,
         Name,
         Result,
-        ScoreList,
+        ScoreLists,
         Word,
     },
     data() {
@@ -105,8 +92,6 @@ export default {
             words: [],
             wordsCompleted: [],
             inputs: 0,
-            highScores: [],
-            latestScores: [],
         };
     },
     computed: {
@@ -131,32 +116,10 @@ export default {
     mounted() {
         this.checkIfNameExists();
         this.setWords();
-        this.initHighScore();
-        this.initLatestScore();
     },
     methods: {
         checkIfNameExists() {
             this.name = window.localStorage.getItem('name');
-        },
-        initHighScore() {
-            db.ref('scores').orderByChild('wpm').limitToLast(10)
-                .on('value', (snapshot) => {
-                    const scores = [];
-                    snapshot.forEach((child) => {
-                        scores.push(child.val());
-                    });
-                    this.highScores = scores.reverse();
-                });
-        },
-        initLatestScore() {
-            db.ref('scores').limitToLast(10)
-                .on('value', (snapshot) => {
-                    const scores = [];
-                    snapshot.forEach((child) => {
-                        scores.push(child.val());
-                    });
-                    this.latestScores = scores.reverse();
-                });
         },
         addScore(name, wpm) {
             const key = Date.now();

@@ -37,7 +37,13 @@
                     @keyup="checkWord"
                 >
             </div>
-            <div class="w-64 mx-auto flex justify-between items-center">
+            <div class="w-128 mx-auto flex justify-between items-center">
+                <button
+                    class="button"
+                    @click="name = false"
+                >
+                    Change name
+                </button>
                 <Counter
                     ref="counter"
                 />

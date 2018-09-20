@@ -69,8 +69,8 @@ import Name from '../components/Name.vue';
 import Result from '../components/Result.vue';
 import ScoreLists from '../components/ScoreLists.vue';
 import Word from '../components/Word.vue';
-import importedWords from '../utils/words';
 import db from '../utils/firebase';
+import getWords from '../utils/helpers';
 
 export default {
     components: {
@@ -88,7 +88,6 @@ export default {
             ended: false,
             currentWord: 0,
             input: '',
-            importedWords,
             words: [],
             wordsCompleted: [],
             inputs: 0,
@@ -141,15 +140,7 @@ export default {
             this.setWords();
         },
         setWords() {
-            const words = this.importedWords.split('\n').filter(word => word.length > 0);
-            const choosen = [];
-
-            for (let i = 0; i < 5; i++) {
-                const number = Math.floor(Math.random() * words.length);
-                choosen.push(words[number]);
-            }
-
-            this.words = choosen;
+            this.words = getWords(30);
         },
         checkWord(event) {
             this.inputs++;

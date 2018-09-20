@@ -1,25 +1,10 @@
 <template>
     <div class="page py-8">
         <h1 class="heading text-center">Typing game</h1>
-        <div
+        <Name
             v-if="!name"
-            class="inputHolder text-center"
-        >
-            <input
-                v-model="nameInput"
-                type="text"
-                class="input mb-8"
-                placeholder="Enter name..."
-                autofocus
-                @keyup.enter="setName"
-            >
-            <button
-                class="button"
-                @click="setName"
-            >
-                Start
-            </button>
-        </div>
+            @changed="(val) => name = val"
+        />
         <div
             v-if="name"
             class="container"
@@ -90,6 +75,7 @@
 
 <script>
 import Counter from '../components/Counter.vue';
+import Name from '../components/Name.vue';
 import ScoreList from '../components/ScoreList.vue';
 import Word from '../components/Word.vue';
 import importedWords from '../utils/words';
@@ -98,6 +84,7 @@ import db from '../utils/firebase';
 export default {
     components: {
         Counter,
+        Name,
         ScoreList,
         Word,
     },
@@ -168,11 +155,6 @@ export default {
                 key,
             });
         },
-        setName() {
-            if (this.nameInput.length > 0) {
-                this.name = this.nameInput;
-            }
-        },
         restart() {
             this.started = false;
             this.ended = false;
@@ -236,33 +218,5 @@ export default {
     margin-bottom: 50px;
     font-size: 20px;
     line-height: 1.6;
-}
-.inputHolder {
-    width: 500px;
-    margin: 0 auto;
-    max-width: 100%;
-    margin-bottom: 30px;
-}
-.input {
-    padding: 8px 0;
-    border-bottom: 2px solid $primaryColor;
-    width: 100%;
-    font-size: 20px;
-    font-weight: 400;
-    line-height: normal;
-    &::placeholder {
-        color: inherit;
-        opacity: 1;
-    }
-}
-.button {
-    background-color: $primaryColor;
-    padding: 14px 30px;
-    font-size: 14px;
-    font-weight: bold;
-    border-radius: 6px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    color: #fff;
 }
 </style>

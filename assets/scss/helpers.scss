@@ -57,3 +57,34 @@
     object-fit: cover;
     font-family: "object-fit: cover;";
 }
+
+.inputHolder {
+    width: 500px;
+    margin: 0 auto;
+    max-width: 100%;
+    margin-bottom: 30px;
+}
+
+.input {
+    padding: 8px 0;
+    border-bottom: 2px solid $primaryColor;
+    width: 100%;
+    font-size: 20px;
+    font-weight: 400;
+    line-height: normal;
+    &::placeholder {
+        color: inherit;
+        opacity: 1;
+    }
+}
+
+.button {
+    background-color: $primaryColor;
+    padding: 14px 30px;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 6px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #fff;
+}
